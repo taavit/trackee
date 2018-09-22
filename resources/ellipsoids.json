@@ -1,0 +1,140 @@
+[
+    {
+        "code": "AIRY",
+        "name": "Airy",
+        "a": 6377563.396,
+        "invF": 299.3249646
+    },
+    {
+        "code": "AUSTRALIAN_NATIONAL",
+        "name": "Australian National",
+        "a": 6378160,
+        "invF": 298.25
+    },
+    {
+        "code": "BESSEL_1841",
+        "name": "Bessel 1841",
+        "a": 6377397.155,
+        "invF": 299.1528128
+    },
+    {
+        "code": "BESSEL_1841_NAMBIA",
+        "name": "Bessel 1841 (Nambia)",
+        "a": 6377483.865,
+        "invF": 299.1528128
+    },
+    {
+        "code": "CLARKE_1866",
+        "name": "Clarke 1866",
+        "a": 6378206.4,
+        "invF": 294.9786982
+    },
+    {
+        "code": "CLARKE_1880",
+        "name": "Clarke 1880",
+        "a": 6378249.145,
+        "invF": 293.465
+    },
+    {
+        "code": "EVEREST",
+        "name": "Everest",
+        "a": 6377276.345,
+        "invF": 300.8017
+    },
+    {
+        "code": "FISCHER_1960_MERCURY",
+        "name": "Fischer 1960 (Mercury)",
+        "a": 6378166,
+        "invF": 298.3
+    },
+    {
+        "code": "FISCHER_1968",
+        "name": "Fischer 1968",
+        "a": 6378150,
+        "invF": 298.3
+    },
+    {
+        "code": "GRS_1967",
+        "name": "GRS 1967",
+        "a": 6378160,
+        "invF": 298.247167427
+    },
+    {
+        "code": "GRS_1980",
+        "name": "GRS 1980",
+        "a": 6378137,
+        "invF": 298.257222101
+    },
+    {
+        "code": "HELMERT_1906",
+        "name": "Helmert 1906",
+        "a": 6378200,
+        "invF": 298.3
+    },
+    {
+        "code": "HOUGH",
+        "name": "Hough",
+        "a": 6378270,
+        "invF": 297
+    },
+    {
+        "code": "INTERNATIONAL",
+        "name": "International",
+        "a": 6378388,
+        "invF": 297
+    },
+    {
+        "code": "KRASSOVSKY",
+        "name": "Krassovsky",
+        "a": 6378245,
+        "invF": 298.3
+    },
+    {
+        "code": "MODIFIED_AIRY",
+        "name": "Modified Airy",
+        "a": 6377340.189,
+        "invF": 299.3249646
+    },
+    {
+        "code": "MODIFIED_EVEREST",
+        "name": "Modified Everest",
+        "a": 6377304.063,
+        "invF": 300.8017
+    },
+    {
+        "code": "MODIFIED_FISCHER_1960",
+        "name": "Modified Fischer 1960",
+        "a": 6378155,
+        "invF": 298.3
+    },
+    {
+        "code": "SOUTH_AMERICAN_1969",
+        "name": "South American 1969",
+        "a": 6378160,
+        "invF": 298.25
+    },
+    {
+        "code": "WGS60",
+        "name": "WGS 60",
+        "a": 6378165,
+        "invF": 298.3
+    },
+    {
+        "code": "WGS66",
+        "name": "WGS 66",
+        "a": 6378145,
+        "invF": 298.25
+    },
+    {
+        "code": "WGS72",
+        "name": "WGS 72",
+        "a": 6378135,
+        "invF": 298.26
+    },
+    {
+        "code": "WGS84",
+        "name": "WGS 84",
+        "a": 6378137,
+        "invF": 298.257223563
+    }
+]
