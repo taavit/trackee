@@ -1,4 +1,9 @@
-var/*
-!var/.gitkeep
+var/
+
+!var/data/.gitkeep
+!var/cache/.gitkeep
 
 /vendor/
+
+.phpcs-cache
+.env

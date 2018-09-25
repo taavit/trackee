@@ -4,27 +4,22 @@ declare(strict_types=1);
 
 namespace Taavit\Trackee\Model;
 
+use League\Flysystem\FilesystemInterface;
+
 use Taavit\Trackee\Reader\Reader;
-
-use const DIRECTORY_SEPARATOR;
-
-use function array_map;
-use function realpath;
-use function rtrim;
-use function scandir;
 
 class FilesystemRepository
 {
-    /** @var string */
-    private $path;
+    /** @var FilesystemInterface */
+    private $filesystem;
 
     /** @var Reader[] */
     private $readers;
 
-    public function __construct(string $path)
+    public function __construct(FilesystemInterface $filesystem)
     {
-        $this->path    = rtrim($path, DIRECTORY_SEPARATOR);
-        $this->readers = [];
+        $this->filesystem = $filesystem;
+        $this->readers    = [];
     }
 
     public function registerReader(Reader $reader) : void
@@ -37,17 +32,23 @@ class FilesystemRepository
      */
     public function getAll() : array
     {
+        /** @var Activity[] $activities */
         $activities = [];
 
-        $files = array_map(
-            [$this, 'normalizePath'],
-            scandir($this->path)
-        );
+        // phpcs:disable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.InvalidFormat
+        /** @var array<string, array{path: string}> $files */
+        $files = $this->filesystem->listContents();
+        // phpcs:enable SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration.InvalidFormat
 
         foreach ($files as $file) {
             foreach ($this->readers as $reader) {
-                if ($reader->supports($file)) {
-                    $activities[] = $reader->read($file);
+                $path = $file['path'];
+                if ($reader->supports($path)) {
+                    $content = $this->filesystem->read($path);
+                    if ($content === false) {
+                        throw new \RuntimeException('Cannot read file');
+                    }
+                    $activities[] = $reader->parse($content);
                     break;
                 }
             }
@@ -64,11 +65,4 @@ class FilesystemRepository
         }
         throw new \RuntimeException();
     }
-
-    // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements
-    private function normalizePath(string $filename) : string
-    {
-        return realpath($this->path . DIRECTORY_SEPARATOR . $filename);
-    }
-    // phpcs:enable
 }

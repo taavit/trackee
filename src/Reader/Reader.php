@@ -9,5 +9,6 @@ use Taavit\Trackee\Model\Activity;
 interface Reader
 {
     public function read(string $filename) : Activity;
+    public function parse(string $raw) : Activity;
     public function supports(string $filename) : bool;
 }

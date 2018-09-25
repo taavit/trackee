@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Taavit\Trackee\Model;
 
 use Taavit\Trackee\Geo\Calculator\Calculator;
+use Taavit\Trackee\Geo\Unit\GeoPoint;
 use Taavit\Trackee\Unit\Distance;
 use Taavit\Trackee\Unit\Duration;
-
+use function array_map;
 use function count;
 
 class Activity
@@ -86,4 +87,21 @@ class Activity
         }
         return $this->distance;
     }
+
+    /**
+     * @return GeoPoint[]
+     */
+    public function geoPoints() : array
+    {
+        /** @var GeoPoint[] $geoPoints */
+        $geoPoints = array_map('self::extractGeoPoint', $this->trackPoints);
+        return $geoPoints;
+    }
+
+    // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
+    private static function extractGeoPoint(TrackPoint $point) : GeoPoint
+    {
+        return $point->geoPoint();
+    }
+    // phpcs:enable
 }

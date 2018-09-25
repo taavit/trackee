@@ -4,8 +4,16 @@
     use Taavit\Trackee\Reader\TcxReader;
     use Taavit\Trackee\Model\FilesystemRepository;
     use Taavit\Trackee\Geo\Calculator\Flat as FlatCalculator;
+    use League\Flysystem\Adapter\Local;
+    use League\Flysystem\Filesystem;
 
-    $repository = new FilesystemRepository(__DIR__.'/../var/');
+    $dotenv = new \Dotenv\Dotenv(__DIR__.'/../');
+    $dotenv->load();
+
+    $adapter = new Local(__DIR__.'/../var/data');
+    $activityFilesystem = new Filesystem($adapter);
+    $repository = new FilesystemRepository($activityFilesystem);
+
     $repository->registerReader(new TcxReader());
     $calculator = new FlatCalculator();
 

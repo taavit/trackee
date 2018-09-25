@@ -4,8 +4,14 @@
     use Taavit\Trackee\Reader\TcxReader;
     use Taavit\Trackee\Model\FilesystemRepository;
     use Taavit\Trackee\Geo\Calculator\Flat as FlatCalculator;
+    use League\Flysystem\Filesystem;
+    use League\Flysystem\Adapter\Local;
 
-    $repository = new FilesystemRepository(__DIR__.'/../var/');
+    $adapter = new Local(__DIR__.'/../var/data');
+    $activityFilesystem = new Filesystem($adapter);
+
+    $repository = new FilesystemRepository($activityFilesystem);
+
     $repository->registerReader(new TcxReader());
     $calculator = new FlatCalculator();
 
@@ -25,6 +31,6 @@
 <body>
     <h1>Trackee</h1>
     <h2>Aktywność: <?php echo $activity->id() ?></h2>
-    
+    <img src="image.php?id=<?php echo $activity->id() ?>" />
 </body>
 </html>
