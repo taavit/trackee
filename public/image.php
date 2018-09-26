@@ -5,8 +5,10 @@
     use Taavit\Trackee\Model\FilesystemRepository;
     use Taavit\Trackee\Geo\Calculator\Flat as FlatCalculator;
     use Taavit\Trackee\Coding\Polyline as PolylineCoder;
-    use Taavit\Trackee\Processor\Limiter as SimpleLimiter;
+    use Taavit\Trackee\Processor\Limiter;
+    use Taavit\Trackee\Algo\Simplification\RamerDouglasPeucker;
     use Taavit\Trackee\Map\StaticUrl;
+
     use League\Flysystem\Adapter\Local;
     use League\Flysystem\Filesystem;
 
@@ -22,7 +24,8 @@
 
     $repository->registerReader(new TcxReader());
     $calculator = new FlatCalculator();
-    $limiter = new SimpleLimiter();
+    const PRECISION = 0.0005;
+    $limiter = new Limiter(new RamerDouglasPeucker(PRECISION));
 
     $activity = $repository->getById($_GET['id']);
     $staticMap = new StaticUrl(getenv('MAPBOX_API_KEY'));
@@ -31,7 +34,7 @@
     $coder = new PolylineCoder();
 
     if (!$imageFilesystem->has("{$activity->id()}.png")) {
-        $track = $coder->encode($limiter->process($activity->geoPoints(), 1000));
+        $track = $coder->encode($limiter->process($activity->geoPoints()));
         $content = $staticMap->readImage($track, 640, 480);
         $imageFilesystem->write("{$activity->id()}.png", $content);
     }
