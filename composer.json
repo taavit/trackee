@@ -16,7 +16,8 @@
     "require": {
         "vlucas/phpdotenv": "^2.5",
         "league/flysystem": "^1.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "imagine/imagine": "^1.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.3",

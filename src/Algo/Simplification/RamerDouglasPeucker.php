@@ -25,8 +25,10 @@ class RamerDouglasPeucker implements Simplification
     }
 
     /**
-     * {@inheritDoc}
-     */
+     * @param Point[] $data
+     *
+     * @return Point[]
+     **/
     public function simplify(array $data) : array
     {
         // Find the point with the maximum distance
@@ -45,12 +47,9 @@ class RamerDouglasPeucker implements Simplification
 
         for ($i = 1; $i < $length - 2; $i++) {
             $d = $this->perpendicularDistance(
-                $data[0][0],
-                $data[0][1],
-                $data[$length - 1][0],
-                $data[$length - 1][1],
-                $data[$i][0],
-                $data[$i][1]
+                $data[0],
+                $data[$length - 1],
+                $data[$i]
             );
             if ($d <= $dmax) {
                 continue;
@@ -77,13 +76,13 @@ class RamerDouglasPeucker implements Simplification
     }
 
     private function perpendicularDistance(
-        float $x1,
-        float $y1,
-        float $x2,
-        float $y2,
-        float $x0,
-        float $y0
+        Point $p1,
+        Point $p2,
+        Point $p0
     ) : float {
-        return abs(($y2 - $y1) * $x0 - ($x2 - $x1) * $y0 + $x2 * $y1 - $y2 * $x1)/sqrt(pow($y2 - $y1, 2) + pow($x2 - $x1, 2));
+        return abs(
+            ($p2->y() - $p1->y()) * $p0->x() - ($p2->x() - $p1->x()) * $p0->y() + $p2->x() * $p1->y() - $p2->y() * $p1->x()
+        )/
+            sqrt(pow($p2->y() - $p1->y(), 2) + pow($p2->x() - $p1->x(), 2));
     }
 }

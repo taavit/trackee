@@ -7,9 +7,9 @@ namespace Taavit\Trackee\Algo\Simplification;
 interface Simplification
 {
     /**
-     * @param array<int, array<int, float>> $data
+     * @param Point[] $data
      *
-     * @return array<int, array<int, float>>
+     * @return Point[]
      **/
     public function simplify(array $data) : array;
 }

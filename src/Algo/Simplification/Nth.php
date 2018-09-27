@@ -16,12 +16,17 @@ class Nth implements Simplification
         $this->step = $step;
     }
 
+    /**
+     * @param Point[] $data
+     *
+     * @return Point[]
+     **/
     public function simplify(array $data) : array
     {
         if (count($data) < 3) {
             return $data;
         }
-        /** @var array<int, array<int, float>> */
+        /** @var Point[] $results */
         $results = [$data[0]];
 
         for ($i = 1, $l = count($data) - 1; $i < $l; $i++) {

@@ -3,6 +3,8 @@
 
     use Taavit\Trackee\Reader\TcxReader;
     use Taavit\Trackee\Model\FilesystemRepository;
+    use Taavit\Trackee\Model\TrackPoint;
+    use Taavit\Trackee\Geo\Unit\GeoPoint;
     use Taavit\Trackee\Geo\Calculator\Flat as FlatCalculator;
     use Taavit\Trackee\Coding\Polyline as PolylineCoder;
     use Taavit\Trackee\Processor\Limiter;
@@ -24,7 +26,7 @@
 
     $repository->registerReader(new TcxReader());
     $calculator = new FlatCalculator();
-    const PRECISION = 0.0005;
+    const PRECISION = 0.0001;
     $limiter = new Limiter(new RamerDouglasPeucker(PRECISION));
 
     $activity = $repository->getById($_GET['id']);
@@ -33,8 +35,17 @@
     $activity->calculateDistance($calculator);
     $coder = new PolylineCoder();
 
+    function extractGeoPoint(TrackPoint $point) : GeoPoint
+    {
+        return $point->geoPoint();
+    }
+
     if (!$imageFilesystem->has("{$activity->id()}.png")) {
-        $track = $coder->encode($limiter->process($activity->geoPoints()));
+        $track = $coder->encode(
+            array_map(
+                'extractGeoPoint',
+                $limiter->process($activity->trackPoints()))
+            );
         $content = $staticMap->readImage($track, 640, 480);
         $imageFilesystem->write("{$activity->id()}.png", $content);
     }

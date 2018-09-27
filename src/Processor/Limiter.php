@@ -5,64 +5,53 @@ declare(strict_types=1);
 namespace Taavit\Trackee\Processor;
 
 use Taavit\Trackee\Algo\Simplification\Simplification;
-use Taavit\Trackee\Geo\Unit\Ellipsoid;
-use Taavit\Trackee\Geo\Unit\GeoPoint;
+use Taavit\Trackee\Model\TrackPoint;
 use function array_map;
 use function count;
 
 class Limiter
 {
-    /** @var Ellipsoid */
-    private $ellipsoid;
-
     /** @var Simplification */
     private $simplification;
 
     public function __construct(Simplification $simplification)
     {
         $this->simplification = $simplification;
-        $this->ellipsoid      = new Ellipsoid('EMPTY', 1, 1);
     }
 
     /**
-     * @param GeoPoint[] $geoPoints
+     * @param TrackPoint[] $trackPoints
      *
-     * @return GeoPoint[]
+     * @return TrackPoint[]
      */
-    public function process(array $geoPoints) : array
+    public function process(array $trackPoints) : array
     {
-        if (count($geoPoints) === 0) {
+        if (count($trackPoints) === 0) {
             return [];
         }
-        $this->ellipsoid = $geoPoints[0]->ellipsoid();
 
-        $points    = array_map([$this, 'pointToArray'], $geoPoints);
+        $points    = array_map([$this, 'wrapTrackPoint'], $trackPoints);
         $processed = $this->simplification->simplify($points);
-        return array_map([$this, 'arrayToPoint'], $processed);
+        /** @var TrackPoint[] $return */
+        $return = [];
+
+        // Unpacking because when object is passed to algo, original data type is lost
+        // With generics it would be easy, but… yeah, generics.
+        foreach ($processed as $processedPoint) {
+            foreach ($trackPoints as $trackPoint) {
+                if ($trackPoint->timestamp()->format(\DateTime::ATOM) === $processedPoint->id()) {
+                    $return[] = $trackPoint;
+                    break 1;
+                }
+            }
+        }
+        return $return;
     }
 
     // phpcs:disable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
-    /**
-     * @return array<int, float>
-     */
-    private function pointToArray(GeoPoint $point) : array
+    private function wrapTrackPoint(TrackPoint $point) : PointWrapper
     {
-        return [
-            $point->latitude(),
-            $point->longitude(),
-        ];
-    }
-
-    /**
-     * @param array<int, float> $point
-     */
-    private function arrayToPoint(array $point) : GeoPoint
-    {
-        return new GeoPoint(
-            $point[0],
-            $point[1],
-            $this->ellipsoid
-        );
+        return new PointWrapper($point);
     }
     // phpcs:enable SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
 }
